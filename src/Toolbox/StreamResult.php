@@ -12,13 +12,13 @@
 namespace Symfony\AI\Agent\Toolbox;
 
 use Symfony\AI\Platform\Message\Message;
-use Symfony\AI\Platform\Response\BaseResponse;
-use Symfony\AI\Platform\Response\ToolCallResponse;
+use Symfony\AI\Platform\Result\BaseResult;
+use Symfony\AI\Platform\Result\ToolCallResult;
 
 /**
  * @author Denis Zunke <denis.zunke@gmail.com>
  */
-final class StreamResponse extends BaseResponse
+final class StreamResult extends BaseResult
 {
     public function __construct(
         private readonly \Generator $generator,
@@ -28,15 +28,16 @@ final class StreamResponse extends BaseResponse
 
     public function getContent(): \Generator
     {
-        $streamedResponse = '';
+        $streamedResult = '';
         foreach ($this->generator as $value) {
-            if ($value instanceof ToolCallResponse) {
-                yield from ($this->handleToolCallsCallback)($value, Message::ofAssistant($streamedResponse))->getContent();
+            if ($value instanceof ToolCallResult) {
+                yield from ($this->handleToolCallsCallback)($value, Message::ofAssistant($streamedResult))->getContent();
 
                 break;
             }
 
-            $streamedResponse .= $value;
+            $streamedResult .= $value;
+
             yield $value;
         }
     }

@@ -11,12 +11,12 @@
 
 namespace Symfony\AI\Agent\Toolbox;
 
-use Symfony\AI\Platform\Response\ToolCall;
+use Symfony\AI\Platform\Result\ToolCall;
 
 /**
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
-final readonly class ToolCallResult
+final readonly class ToolResult
 {
     public function __construct(
         public ToolCall $toolCall,
